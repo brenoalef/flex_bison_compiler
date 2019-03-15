@@ -1,0 +1,14 @@
+var
+    int: i;
+begin
+    i := 0;
+    write i;
+    while i < 5
+        read i;
+        if i > 2
+            write i*2;
+        else
+            write i+5;
+        end
+    end
+end

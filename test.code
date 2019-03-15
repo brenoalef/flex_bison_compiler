@@ -1,0 +1,30 @@
+var
+    int : x, i, v[10];
+    string : msg;
+    bool : flag;
+begin
+    msg := "Digite um número";
+    write msg;
+    read x;
+    do i := 1 to 100 begin
+        x := x + 1;
+    end
+    write x;
+
+    while (x >= i)
+        flag := (x / 2) == 20;
+        x := x - 1;
+    end
+
+    if not x != 0
+        write "a";
+    else
+        if x == 1 and i > 1
+            write("b");
+        end
+    end
+
+    read i;
+    v[2] := -i;
+    flag := false;
+end

@@ -1,0 +1,11 @@
+var
+    int: i, j;
+begin
+    i := -10;
+    while i <= 10
+        do j := -10 to 10 begin
+            write (i + 2*j);
+        end
+        i := i + 1;
+    end
+end
