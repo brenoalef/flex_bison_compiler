@@ -2,14 +2,18 @@ enum code_ops {
     HALT, STORE, JMP_FALSE, GOTO,
     DATA, LD_INT, LD_VAR,
     READ_INT, WRITE_INT,
-    LT, EQU, GT, ADD, SUB, MULT, DIV
+    LT, LEQU, EQU, GEQU, GT, NEQU,
+    NOT_OP, AND_OP, OR_OP,
+    ADD, SUB, NEG, MULT, DIV
 };
 
 char *op_name[] = {
     "halt", "store", "jmp_false", "goto",
     "data", "ld_int", "ld_var",
     "in_int", "out_int",
-    "lt", "equ", "gt", "add", "sub", "mult", "div"
+    "lt", "lequ", "equ", "gequ", "gt", "nequ",
+    "not_op", "and_op", "or_op",
+    "add", "sub", "neg", "mult", "div"
 };
 
 struct instruction {
@@ -68,8 +72,22 @@ void fetch_execute_cycle() {
                     stack[--top] = 0;
                 }
                 break;
+            case LEQU:
+                if (stack[top - 1] <= stack[top]) {
+                    stack[--top] = 1;
+                } else {
+                    stack[--top] = 0;
+                }
+                break;
             case EQU:
-                if (stack[top - 1] = stack[top]) {
+                if (stack[top - 1] == stack[top]) {
+                    stack[--top] = 1;
+                } else {
+                    stack[--top] = 0;
+                }
+                break;
+            case GEQU:
+                if (stack[top - 1] >= stack[top]) {
                     stack[--top] = 1;
                 } else {
                     stack[--top] = 0;
@@ -77,6 +95,34 @@ void fetch_execute_cycle() {
                 break;
             case GT:
                 if (stack[top - 1] > stack[top]) {
+                    stack[--top] = 1;
+                } else {
+                    stack[--top] = 0;
+                }
+                break;
+            case NEQU:
+                if (stack[top - 1] != stack[top]) {
+                    stack[--top] = 1;
+                } else {
+                    stack[--top] = 0;
+                }
+                break;
+            case NOT_OP:
+                if (!stack[top]) {
+                    stack[top] = 1;
+                } else {
+                    stack[top] = 0;
+                }
+                break;
+            case AND_OP:
+                if (stack[top - 1] && stack[top]) {
+                    stack[--top] = 1;
+                } else {
+                    stack[--top] = 0;
+                }
+                break;
+            case OR_OP:
+                if (stack[top - 1] || stack[top]) {
                     stack[--top] = 1;
                 } else {
                     stack[--top] = 0;
@@ -90,6 +136,9 @@ void fetch_execute_cycle() {
                 stack[top - 1] = stack[top - 1] - stack[top];
                 top--;
                 break;
+            case NEG:
+                stack[top] = - stack[top];
+                break;   
             case MULT:
                 stack[top - 1] = stack[top - 1] * stack[top];
                 top--;

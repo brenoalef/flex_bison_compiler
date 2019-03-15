@@ -74,6 +74,8 @@ context_check(enum code_ops operation, char *sym_name) {
 
 %left '+' '-'
 %left '*' '/'
+%left AND OR
+%right NOT
 
 %type<intval> const
 %type<id> l_val
@@ -140,16 +142,16 @@ exp:
     | exp '-' exp       { gen_code(SUB, 0); }
     | exp '*' exp       { gen_code(MULT, 0); }
     | exp '/' exp       { gen_code(DIV, 0); }
-    //| '-' exp           { $$ = -$1; }
-    //| exp OR exp        { gen_code(OROP, 0); }
-    //| exp AND exp       { gen_code(ANDOP, 0); }
-    |// NOT exp           { gen_code(NOTOP, 0); }
+    | '-' exp           { gen_code(NEG, 0); }
+    | exp OR exp        { gen_code(OR_OP, 0); }
+    | exp AND exp       { gen_code(AND_OP, 0); }
+    | NOT exp           { gen_code(NOT_OP, 0); }
     | exp EQ exp        { gen_code(EQU, 0); }
-    //| exp NEQ exp       { gen_code(NEQU, 0); }
+    | exp NEQ exp       { gen_code(NEQU, 0); }
     | exp GREATER exp   { gen_code(GT, 0); }
     | exp LESS exp      { gen_code(LT, 0); }
-    //| exp LEQ exp       { gen_code(LEQU, 0); }
-    //| exp GEQ exp       { gen_code(GEQU, 0); }
+    | exp LEQ exp       { gen_code(LEQU, 0); }
+    | exp GEQ exp       { gen_code(GEQU, 0); }
     | '(' exp ')'
     | const             { gen_code(LD_INT, $1); }
     | ID                { context_check(LD_VAR, $1); }
