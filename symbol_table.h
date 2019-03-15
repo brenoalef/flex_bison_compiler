@@ -5,6 +5,14 @@ struct symrec {
 };
 typedef struct symrec symrec;
 
+struct element {
+    char el_type;
+    int int_val;
+    char *string_val;
+    char bool_val;
+};
+typedef struct element element;
+
 symrec *identifier;
 symrec *sym_table = (symrec *) 0;
 

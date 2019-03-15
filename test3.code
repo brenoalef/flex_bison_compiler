@@ -1,10 +1,23 @@
 var
-    int: i;
+    int: i, j;
+    bool: b;
+    string: s;
 begin
     i := 4;
-    if not (i > 6) and not (i < 5)
-        write 1;
+    b := true;
+    s := "teste";
+    write i + j;
+    write i*2;
+    write b and (i != 5);
+    write s;
+    if i > 2
+        write i/2;
     else
-        write -1+2-3+1;
-    end 
+        write i;
+    end
+    while i <= 10
+        write i;
+        i := i + 1;
+    end
+    
 end
