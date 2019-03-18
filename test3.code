@@ -1,23 +1,12 @@
 var
-    int: i, j;
+    int: i, j, k;
     bool: b;
-    string: s;
+    string: s1, s2;
 begin
-    i := 4;
+    j := 4;
     b := true;
-    s := "teste";
-    write i + j;
-    write i*2;
-    write b and (i != 5);
-    write s;
-    if i > 2
-        write i/2;
-    else
-        write i;
-    end
-    while i <= 10
-        write i;
-        i := i + 1;
-    end
-    
+    write j;
+    s1 := "Test";
+    write s1;
+    write b;
 end

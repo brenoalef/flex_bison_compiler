@@ -1,4 +1,9 @@
 int data_offset = 0;
+
+void set_type(char type, int offset) {
+    stack[offset].el_type = type;
+}
+
 int data_location() {
     return data_offset++;
 }

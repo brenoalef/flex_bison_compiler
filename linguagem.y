@@ -18,28 +18,33 @@ struct lbs *newlblrec() {
     return (struct lbs *) malloc(sizeof(struct lbs));
 }
 
-install (char *sym_name) {
+struct var_list {
+    symrec *var;
+    struct var_list * next;
+};
+
+struct var_list * install (char *sym_name) {
     symrec *s;
     s = getsym(sym_name);
     if (s == 0) {
         s = putsym(sym_name);
+        struct var_list *v = (struct var_list *) malloc(sizeof(struct var_list));
+        v->next = NULL;
+        v->var = s;
+        return v;
     } else {
         errors++;
         printf("%s ja definido\n", sym_name);
     }
 }
 
-set_type(char type, char* names) {
-    symrec *s;
-    char *ptr = strtok(names, ",");
-
-	while(ptr != NULL)
-	{
-        s = getsym(ptr);
-        //s->el_type = type;
-        stack[s->offset].el_type = type;
-		ptr = strtok(NULL, ",");
-	}
+set_var_type(char type, struct var_list * vars) {
+    printf("set_var_type, %c", type);
+    struct var_list * next = vars;
+    while (next) {
+        set_type(type, (next->var)->offset);
+        next = next->next;
+    }
 }
 
 element *create_int(int arg) {
@@ -85,6 +90,7 @@ context_check(enum code_ops operation, char *sym_name) {
     char* string_val;
     char *id;
     struct lbs *lbls;
+    struct var_list * var_names;
 }
 
 %start programa
@@ -115,8 +121,8 @@ context_check(enum code_ops operation, char *sym_name) {
 
 %type<id> l_val
 %type<charval> tipo
-%type<string_val> listavar
-%type<string_val> var
+%type<var_names> var
+%type<var_names> listavar
 
 %%
 
@@ -132,7 +138,7 @@ listadecl:
     | vardecl
     ;
 vardecl:
-    tipo ':' listavar ';'       { set_type($1, $3); }
+    tipo ':' listavar ';'       { set_var_type($1, $3); }
     ;
 tipo:
     INT                         { $$ = 'i'; }               
@@ -140,11 +146,11 @@ tipo:
     | STRING                    { $$ = 's'; }
     ;
 listavar:
-    listavar ',' var            
+    listavar ',' var            { $1->next = $3; }
     | var                       
     ;
 var:
-    ID                           { install($1); }
+    ID                           { $$ = install($1); }
     //| ID '[' I_CONST ']'        { $$ = strdup($1); }
     ;
 listacmd:
